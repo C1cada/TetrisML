@@ -1,5 +1,5 @@
 import random
-import piece
+from env import piece
 import copy
 
 class Game:
@@ -104,10 +104,11 @@ class Game:
         self._current = None
 
     def render(self):
-        print(self._current.get_x())
-        print(self._current.get_y())
         render = copy.deepcopy(self._board)
-        render = self.place_piece(render, self._current)
+        if self._current:
+            print(self._current.get_x())
+            print(self._current.get_y())
+            render = self.place_piece(render, self._current)
         return render
 
     def get_current(self):
@@ -127,3 +128,19 @@ class Game:
             if full == True:
                 print("full")
 
+    def clear_rows(self):
+        cleared = 0
+        for row in range(len(self._board)-1,-1,-1):
+            full = True
+            for col in self._board[row]:
+                if col == 0:
+                    full = False
+                    break
+
+            if full == True:
+                cleared += 1
+            if cleared != 0:
+                if row-cleared < 0:
+                    self._board[row] = [0 for _ in range(self._width)]
+                else:
+                    self._board[row] = self._board[row-cleared]
