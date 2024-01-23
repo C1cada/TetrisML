@@ -13,30 +13,27 @@ class Game:
     def generate_new_board(self):
         new_board = [[0 for _ in range(self._width)] for _ in range(self._height)]
         self._board = new_board
+
+    def add_board(self, board):
+        self._board = board
+        self._width = len(board[0])
+        self._height = len(board)
     
     def choose_shape(self):
         SHAPES = [
-                [[0, 0, 0, 0],
-                 [1, 1, 1, 1],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0]],
+                [[1, 1, 1, 1]],
                 [[1, 0, 0],
-                 [1, 1, 1],
-                 [0, 0, 0]],
+                 [1, 1, 1]],
                 [[0, 0, 1],
-                 [1, 1, 1],
-                 [0, 0, 0]],
+                 [1, 1, 1]],
                 [[0, 1, 0],
-                 [1, 1, 1],
-                 [0, 0, 0]],
+                 [1, 1, 1]],
                 [[1, 1], 
                  [1, 1]],
                 [[1, 1, 0], 
-                 [0, 1, 1],
-                 [0, 0, 0]],
+                 [0, 1, 1]],
                 [[0, 1, 1],
-                 [1, 1, 0],
-                 [0, 0, 0]]]
+                 [1, 1, 0]]]
         return SHAPES[random.randint(0,len(SHAPES)-1)]
     
     def check_overlap(self):
@@ -76,7 +73,7 @@ class Game:
             self._current.rotate()
 
     def create_new_piece(self, shape):
-        return piece.Piece(shape, 0, int(self._width/2))
+        return piece.Piece(shape, int(self._width/2)-1, 0)
     
     def choose_and_create_piece(self):
         self.set_current(self.create_new_piece(self.choose_shape()))
@@ -107,6 +104,8 @@ class Game:
         self._current = None
 
     def render(self):
+        print(self._current.get_x())
+        print(self._current.get_y())
         render = copy.deepcopy(self._board)
         render = self.place_piece(render, self._current)
         return render
@@ -127,4 +126,4 @@ class Game:
 
             if full == True:
                 print("full")
-            
+

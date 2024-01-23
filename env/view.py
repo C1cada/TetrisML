@@ -11,6 +11,7 @@ class View:
                 self.game.place_current_on_board()
             if not self.game.get_current():
                 self.game.choose_and_create_piece()
+            self.game.check_clear()
             self.printBoard(self.game.render())
             print("Next move: ")
             move = input()
@@ -26,6 +27,7 @@ class View:
     def printBoard(self, board):
         for row in board:
             print(row)
+            
 if __name__ == "__main__":
     view = View()
     view.start_game()
