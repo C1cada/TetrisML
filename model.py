@@ -1,5 +1,5 @@
 import random
-from env import piece
+import piece
 import copy
 
 class Game:

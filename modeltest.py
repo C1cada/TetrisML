@@ -1,5 +1,5 @@
 import unittest
-from env import model
+import model
 
 class TestModel(unittest.TestCase):
     def test_clear_board_empty(self):
