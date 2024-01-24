@@ -59,6 +59,7 @@ class Game:
     def move_down(self):
         if self._current:
             self._current.move_down()
+            self.score_points(1)
 
     def move_left(self):
         if self._current:
@@ -73,7 +74,7 @@ class Game:
             self._current.rotate()
 
     def create_new_piece(self, shape):
-        return piece.Piece(shape, int(self._width/2)-1, 0)
+        return piece.Piece(shape, int(self._width/2)-1, 0, self._width)
     
     def choose_and_create_piece(self):
         self.set_current(self.create_new_piece(self.choose_shape()))
@@ -117,18 +118,8 @@ class Game:
     def set_current(self, piece):
         self._current = piece
 
-    def check_clear(self):
-        for row in self._board:
-            full = True
-            for col in row:
-                if col == 0:
-                    full = False
-                    break
-
-            if full == True:
-                print("full")
-
     def clear_rows(self):
+        num = 0
         for row in range(len(self._board)-1,-1,-1):
             full = True
             for col in self._board[row]:
@@ -137,21 +128,30 @@ class Game:
                     break
             
             if full:
-                self.move_board_down(row)
-
-    def move_board_down(self, full_row):
+                num += self.move_board_down(row, 0)
+        if num > 0:
+            print((num-1)*200 + 100)
+            self.score_points((num-1)*200 + 100)
+    
+    def move_board_down(self, full_row, num):
+        num += 1
         if full_row-1 < 0:
             self._board[full_row] = [0 for _ in range(self._width)]
-            return
+            return num
         full = True
         for col in self._board[full_row-1]:
             if col == 0:
                 full = False
                 break
         if full:
-            self.move_board_down(full_row-1)
+            num = self.move_board_down(full_row-1, num)
         for row in range(full_row,-1,-1):
             if row-1 < 0:
                 self._board[row] = [0 for _ in range(self._width)]
             else:
                 self._board[row] = self._board[row-1]
+
+        return num
+
+    def score_points(self, amount):
+        self._score += amount

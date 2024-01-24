@@ -6,12 +6,13 @@ class View:
 
     def start_game(self):
         self.game.generate_new_board()
+        turns = 0
         while True:
             if not self.game.check_overlap():
                 self.game.place_current_on_board()
             if not self.game.get_current():
                 self.game.choose_and_create_piece()
-            self.game.check_clear()
+            self.game.clear_rows()
             self.printBoard(self.game.render())
             print("Next move: ")
             move = input()
@@ -23,6 +24,11 @@ class View:
                 self.game.move_down()
             elif move == "rotate":
                 self.game.rotate()
+            
+            if turns % 3 == 0:
+                self.game.move_down()
+            turns += 1
+
 
     def printBoard(self, board):
         for row in board:

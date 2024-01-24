@@ -1,5 +1,5 @@
 class Piece():
-    def __init__(self, shape, x, y):
+    def __init__(self, shape, x, y, width):
         self._shape = shape
         self._x = x
         self._y = y
@@ -7,6 +7,7 @@ class Piece():
         self._empty_space_right = 0
         self._empty_space_up = 0
         self._empty_space_down = 0
+        self._width = width
 
     def calculate_empty_space(self):
         self._empty_space_left = 0
@@ -52,10 +53,8 @@ class Piece():
         
     def rotate(self):
         self._shape = [list(row) for row in zip(*self._shape[::-1])]
-        # for row in self._shape:
-        #     if row[0] == 1:
-        #         self._x += 1
-            
+        if len(max(self._shape, key = len))+self._x >= self._width:
+            self._x -= len(max(self._shape, key = len))+self._x - self._width
         
     def get_shape(self):
         return self._shape
@@ -74,5 +73,5 @@ class Piece():
             self._x -= 1
         
     def move_right(self):
-        if self._x<9:
+        if len(max(self._shape, key = len))+self._x < self._width:
             self._x += 1
