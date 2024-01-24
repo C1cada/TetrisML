@@ -129,18 +129,29 @@ class Game:
                 print("full")
 
     def clear_rows(self):
-        cleared = 0
         for row in range(len(self._board)-1,-1,-1):
             full = True
             for col in self._board[row]:
                 if col == 0:
                     full = False
                     break
+            
+            if full:
+                self.move_board_down(row)
 
-            if full == True:
-                cleared += 1
-            if cleared != 0:
-                if row-cleared < 0:
-                    self._board[row] = [0 for _ in range(self._width)]
-                else:
-                    self._board[row] = self._board[row-cleared]
+    def move_board_down(self, full_row):
+        if full_row-1 < 0:
+            self._board[full_row] = [0 for _ in range(self._width)]
+            return
+        full = True
+        for col in self._board[full_row-1]:
+            if col == 0:
+                full = False
+                break
+        if full:
+            self.move_board_down(full_row-1)
+        for row in range(full_row,-1,-1):
+            if row-1 < 0:
+                self._board[row] = [0 for _ in range(self._width)]
+            else:
+                self._board[row] = self._board[row-1]
